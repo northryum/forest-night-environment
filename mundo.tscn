@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://bn78ie51pvn0p"]
+
+[ext_resource type="Script" uid="uid://ct7mmn72ccppt" path="res://character_body_3d.gd" id="1_6ba58"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lgngo"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fw4w5"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_otwa2"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_aou4a"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ckkb"]
+albedo_color = Color(0.45882353, 0.6156863, 1, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2hh7m"]
+
+[node name="Node" type="Node" unique_id=1812721533]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=637910911]
+
+[node name="ground" type="MeshInstance3D" parent="StaticBody3D" unique_id=1894988709]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
+mesh = SubResource("PlaneMesh_lgngo")
+surface_material_override/0 = SubResource("StandardMaterial3D_fw4w5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=628327133]
+transform = Transform3D(20, 0, 0, 0, 0.1, 0, 0, 0, 20, 0, 0, 0)
+shape = SubResource("BoxShape3D_otwa2")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1676555560]
+script = ExtResource("1_6ba58")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=886440369]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_aou4a")
+surface_material_override/0 = SubResource("StandardMaterial3D_5ckkb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1310025214]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_2hh7m")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D" unique_id=191133642]
+transform = Transform3D(1, 0, 0, 0, 0.9396926, 0.34202012, 0, -0.34202012, 0.9396926, 0, 3, 5)
