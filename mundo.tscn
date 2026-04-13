@@ -1,44 +1,79 @@
 [gd_scene format=3 uid="uid://bn78ie51pvn0p"]
 
-[ext_resource type="Script" uid="uid://ct7mmn72ccppt" path="res://character_body_3d.gd" id="1_6ba58"]
+[ext_resource type="Texture2D" uid="uid://bu2ac7v1i8yet" path="res://sky.png" id="1_2hh7m"]
+[ext_resource type="Texture2D" uid="uid://cbenkxh5a85kf" path="res://Ground.png" id="2_fw4w5"]
+[ext_resource type="Texture2D" uid="uid://bcv43ob1irhgs" path="res://Ground_n.png" id="3_otwa2"]
+[ext_resource type="MeshLibrary" uid="uid://ci1gohjbcnosh" path="res://tree_mash.tres" id="4_5ckkb"]
+[ext_resource type="MeshLibrary" uid="uid://cdhhsqcpuplat" path="res://grass_mash.tres" id="5_2hh7m"]
+[ext_resource type="PackedScene" uid="uid://cpjjef64jkfgr" path="res://campfire.tscn" id="6_t8jxu"]
+[ext_resource type="PackedScene" uid="uid://d1g62nejipxct" path="res://player.tscn" id="7_2hh7m"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_lgngo"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_5ckkb"]
+panorama = ExtResource("1_2hh7m")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fw4w5"]
+[sub_resource type="Sky" id="Sky_2hh7m"]
+sky_material = SubResource("PanoramaSkyMaterial_5ckkb")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_otwa2"]
+[sub_resource type="Environment" id="Environment_t8jxu"]
+background_mode = 2
+sky = SubResource("Sky_2hh7m")
+tonemap_mode = 2
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.05220586, 0.06146036, 0.074415796, 1)
+fog_density = 0.04
+fog_sky_affect = 0.85
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_aou4a"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aou4a"]
+albedo_texture = ExtResource("2_fw4w5")
+metallic_specular = 0.0
+normal_enabled = true
+normal_texture = ExtResource("3_otwa2")
+uv1_scale = Vector3(50, 50, 50)
+texture_filter = 0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ckkb"]
-albedo_color = Color(0.45882353, 0.6156863, 1, 1)
+[sub_resource type="PlaneMesh" id="PlaneMesh_5ckkb"]
+material = SubResource("StandardMaterial3D_aou4a")
+size = Vector2(100, 100)
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2hh7m"]
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_2hh7m"]
+data = PackedVector3Array(50, 0, 50, -50, 0, 50, 50, 0, -50, -50, 0, 50, -50, 0, -50, 50, 0, -50)
 
 [node name="Node" type="Node" unique_id=1812721533]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=637910911]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1587348959]
+environment = SubResource("Environment_t8jxu")
 
-[node name="ground" type="MeshInstance3D" parent="StaticBody3D" unique_id=1894988709]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
-mesh = SubResource("PlaneMesh_lgngo")
-surface_material_override/0 = SubResource("StandardMaterial3D_fw4w5")
+[node name="ground - MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2094247258]
+mesh = SubResource("PlaneMesh_5ckkb")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=628327133]
-transform = Transform3D(20, 0, 0, 0, 0.1, 0, 0, 0, 20, 0, 0, 0)
-shape = SubResource("BoxShape3D_otwa2")
+[node name="StaticBody3D" type="StaticBody3D" parent="ground - MeshInstance3D" unique_id=482843583]
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1676555560]
-script = ExtResource("1_6ba58")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ground - MeshInstance3D/StaticBody3D" unique_id=104872405]
+shape = SubResource("ConcavePolygonShape3D_2hh7m")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=886440369]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-mesh = SubResource("CapsuleMesh_aou4a")
-surface_material_override/0 = SubResource("StandardMaterial3D_5ckkb")
+[node name="trees - GridMap" type="GridMap" parent="." unique_id=1876988299]
+mesh_library = ExtResource("4_5ckkb")
+cell_size = Vector3(1, 2, 1)
+cell_center_y = false
+data = {
+"cells": PackedInt32Array(65525, 8, 0, 7, 7, 0, 14, 65526, 0, 65523, 65530, 0, 65532, 65520, 0, 65532, 17, 0, 2, 17, 0, 7, 17, 0, 11, 13, 0, 14, 9, 0, 16, 3, 0, 18, 7, 0, 15, 13, 0, 12, 18, 0, 65513, 65525, 0, 65515, 65521, 0, 9, 65513, 0, 17, 65515, 0, 20, 65519, 0, 20, 65520, 0, 21, 65524, 0, 65524, 65517, 0, 65520, 65521, 0, 65521, 65517, 0, 65521, 65516, 0, 65514, 65529, 0, 65516, 1, 0, 65512, 65535, 0, 65517, 65532, 0, 65523, 3, 0, 65524, 65533, 0, 65528, 10, 0, 65529, 14, 0, 16, 65535, 0, 21, 65535, 0, 21, 65530, 0, 25, 65526, 0, 12, 65516, 0, 65529, 65515, 0, 6, 65517, 0, 2, 65519, 0, 65534, 65517, 0, 3, 65514, 0, 4, 21, 0, 65535, 20, 0, 65528, 4, 0, 65515, 65535, 0, 65515, 0, 0, 65515, 1, 0, 65515, 2, 0, 65516, 2, 0, 65516, 3, 0, 65516, 4, 0, 65516, 5, 0, 65517, 6, 0, 65517, 7, 0, 65517, 8, 0, 65518, 9, 0, 65518, 10, 0, 65518, 11, 0, 65519, 12, 0, 65519, 13, 0, 65520, 14, 0, 65521, 15, 0, 65522, 16, 0, 65523, 17, 0, 65523, 18, 0, 65524, 18, 0, 65524, 19, 0, 65525, 20, 0, 65526, 20, 0, 65527, 20, 0, 65528, 21, 0, 65529, 21, 0, 65530, 21, 0, 65531, 22, 0, 65532, 22, 0, 65533, 22, 0, 65534, 22, 0, 65535, 22, 0, 0, 23, 0, 1, 23, 0, 2, 23, 0, 3, 23, 0, 4, 24, 0, 5, 24, 0, 6, 24, 0, 7, 24, 0, 8, 24, 0, 9, 25, 0, 10, 25, 0, 11, 25, 0, 12, 25, 0, 22, 25, 0, 31, 65533, 0, 26, 65516, 0, 25, 65515, 0, 24, 65515, 0, 23, 65515, 0, 23, 65514, 0, 22, 65514, 0, 21, 65514, 0, 21, 65513, 0, 20, 65513, 0, 19, 65513, 0, 18, 65512, 0, 17, 65512, 0, 16, 65512, 0, 15, 65512, 0, 14, 65511, 0, 13, 65511, 0, 12, 65511, 0, 11, 65511, 0, 10, 65510, 0, 9, 65510, 0, 8, 65510, 0, 7, 65510, 0, 6, 65509, 0, 5, 65509, 0, 4, 65509, 0, 3, 65509, 0, 2, 65508, 0, 1, 65508, 0, 0, 65508, 0, 65535, 65508, 0, 65534, 65507, 0, 65533, 65507, 0, 65532, 65507, 0, 65531, 65507, 0, 65530, 65507, 0, 65529, 65507, 0, 65528, 65507, 0, 65527, 65507, 0, 65526, 65507, 0, 65525, 65507, 0, 65524, 65507, 0, 65523, 65507, 0, 65522, 65507, 0, 65521, 65507, 0, 65520, 65508, 0, 65519, 65508, 0, 65518, 65508, 0, 65517, 65508, 0, 65516, 65508, 0, 65515, 65508, 0, 65514, 65508, 0, 65513, 65509, 0, 65512, 65509, 0, 65511, 65509, 0, 65510, 65510, 0, 65509, 65510, 0, 65509, 65511, 0, 65508, 65512, 0, 65508, 65513, 0, 65507, 65514, 0, 65507, 65515, 0, 65507, 65516, 0, 65506, 65517, 0, 65506, 65518, 0, 65506, 65519, 0, 65506, 65520, 0, 65505, 65521, 0, 65506, 65522, 0, 65505, 65523, 0, 65505, 65524, 0, 65505, 65525, 0, 65505, 65526, 0, 65505, 65527, 0, 65505, 65528, 0, 65505, 65529, 0, 65506, 65530, 0, 65507, 65530, 0, 65507, 65531, 0, 65508, 65531, 0, 65508, 65532, 0, 65509, 65532, 0, 65509, 65533, 0, 65510, 65533, 0, 65510, 65534, 0, 65511, 65534, 0, 65511, 65535, 0, 18, 24, 0, 18, 23, 0, 18, 22, 0, 19, 21, 0, 19, 20, 0, 19, 19, 0, 20, 19, 0, 22, 16, 0, 22, 15, 0, 23, 14, 0, 23, 13, 0, 23, 12, 0, 25, 8, 0, 25, 7, 0, 25, 6, 0, 25, 5, 0, 25, 4, 0, 27, 0, 0, 27, 65535, 0, 27, 65534, 0, 27, 65533, 0, 32, 65527, 0, 31, 65527, 0, 31, 65526, 0)
+}
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1310025214]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("CapsuleShape3D_2hh7m")
+[node name="grass - GridMap" type="GridMap" parent="." unique_id=878573001]
+mesh_library = ExtResource("5_2hh7m")
+cell_size = Vector3(0.5, 2, 0.5)
+cell_center_y = false
+data = {
+"cells": PackedInt32Array(65526, 65535, 0, 65524, 65526, 0, 11, 65531, 0, 65528, 8, 0, 21, 0, 0, 22, 65529, 0, 65519, 65522, 0, 12, 65527, 0, 20, 65523, 0, 24, 2, 0, 7, 11, 0, 65513, 65516, 0, 65517, 65513, 0, 17, 65513, 0, 20, 65506, 0, 7, 65510, 0, 22, 65530, 0, 8, 3, 0, 3, 10, 0, 65535, 16, 0, 7, 25, 0, 10, 24, 0, 65534, 25, 0, 65530, 14, 0, 65527, 8, 0, 65522, 1, 0, 65525, 65526, 0, 65517, 65506, 0, 65533, 65512, 0, 8, 65507, 0, 16, 65507, 0)
+}
 
-[node name="Camera3D" type="Camera3D" parent="CharacterBody3D" unique_id=191133642]
-transform = Transform3D(1, 0, 0, 0, 0.9396926, 0.34202012, 0, -0.34202012, 0.9396926, 0, 3, 5)
+[node name="campfire" parent="." unique_id=892109879 instance=ExtResource("6_t8jxu")]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="campfire" unique_id=1757226990]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68113375, 0)
+light_color = Color(0.84130675, 0.30692786, 0, 1)
+omni_range = 15.0
+
+[node name="CharacterBody3D" parent="." unique_id=919651697 instance=ExtResource("7_2hh7m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8009319, 0, -10.030404)
